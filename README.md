@@ -130,19 +130,29 @@ az role assignment create --role "Azure Event Hubs Data Receiver" --assignee "46
 
 ![image](https://user-images.githubusercontent.com/87186004/235104098-e7902a52-fdcb-4f2b-a5b2-e25cdc7bf6f2.png)
 
+* Give it a name:
+
 ![image](https://user-images.githubusercontent.com/87186004/235104203-61666010-2ec1-4d4e-b1d2-a7bb4e9b9251.png)
 
+* Leave Input Settings blank:
+
 ![image](https://user-images.githubusercontent.com/87186004/235104250-89d5c886-0d7b-47a9-be4d-db05e7839629.png)
+
+* Submit:
 
 ![image](https://user-images.githubusercontent.com/87186004/235104295-faa47f25-d6bb-4485-9fcb-65da0f6cb0b2.png)
 
 ## Splunk - Enable HTTP Event Collector
 
-* Enable HTTP Event Collector
+* Enable HTTP Event Collector:
 
 ![image](https://user-images.githubusercontent.com/87186004/235104627-7f468949-a57b-4c59-9255-6ea525f54bad.png)
 
+* Go to Global Settings:
+
 ![image](https://user-images.githubusercontent.com/87186004/235104756-ed33ea40-47f6-4b2b-aa37-2b93d7d9eca8.png)
+
+* Enable & Save:
 
 ![image](https://user-images.githubusercontent.com/87186004/235104847-36775242-dce2-43e8-8b1e-ca7118ea3b23.png)
 
@@ -150,10 +160,60 @@ az role assignment create --role "Azure Event Hubs Data Receiver" --assignee "46
 
 Installation guide is available here: https://www.outcoldsolutions.com/docs/monitoring-kubernetes/v5/installation/
 
+To achieve this question, you must request a trial license to outcold solutions.
 
+## Configure collectorforkubernetes solution
 
+* Download yaml file:
+```bash
+wget https://www.outcoldsolutions.com/docs/monitoring-kubernetes/v5/configuration/1.24/collectorforkubernetes.yaml
+```
 
+* Edit it, only below fields with your license / token / url:
+```bash
+vi collectorforkubernetes.yaml
+```
 
+```yaml
+[general]
+
+acceptLicense = true
+
+license = Q0gwSDJISUVQUjBMNjoxMDA6MTY4NDU3Nzg2Mjo0.HZXmL7Gd8j57C4PJZpQuKu4zC2MCN+43+Y4jHQ.JkmlmuUbrP/o2OHclNzpVhMvsWoWZCGubGdRRg
+
+fields.kubernetes_cluster = aks-demo-splunk
+
+...
+
+# Splunk output
+[output.splunk]
+
+# Splunk HTTP Event Collector url
+url = http://demo-splunk-david.westeurope.cloudapp.azure.com:8088/services/collector/event/1.0
+
+# Splunk HTTP Event Collector Token
+token = 7451d8c8-799e-4f28-ab67-09ea3b0c28c8
+
+# Allow invalid SSL server certificate
+insecure = true
+```
+
+* Apply the configuration to AKS cluster:
+
+```bash
+az account set --subscription 2c49b441-xxxx-xxxx-xxxx-cd28d472544d
+az aks get-credentials --resource-group aks-splunk-rg --name aks-demo-splunk
+kubectl apply -f ./collectorforkubernetes.yaml
+```
+
+* Check Daemon sets:
+
+```bash
+kubectl get ds -n collectorforkubernetes
+NAME                            DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+collectorforkubernetes          1         1         1       1            1           <none>          91s
+collectorforkubernetes-master   0         0         0       0            0           <none>          91s
+```
 
 
 
