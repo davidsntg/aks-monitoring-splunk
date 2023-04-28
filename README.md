@@ -1,7 +1,10 @@
 # Lab - AKS Monitoring with Splunk
 
+# Infrastructure Provisionning
+
 ## Azure - Create Splunk VM
 
+* Create Splunk VM:
 ```bash
 location="westeurope"
 rg_name="splunk-rg"
@@ -31,12 +34,12 @@ echo "Connect to Splunk VM: ssh ${ssh_admin_user}@${splunk_fqdn}"
 
 ## Install Splunk
 
-Create and account on Splunk Enteprise website and copy Linux .deb installer download link:
+* Create and account on Splunk Enteprise website and copy Linux .deb installer download link:
 
 ![image](https://user-images.githubusercontent.com/87186004/235093298-0c6f6776-d0ea-4d24-b1cf-8fc509c656f1.png)
 
 
-Connect to Splunk VM in SSH and execute below commands:
+* Connect to Splunk VM in SSH and execute below commands:
 
 ```bash
 sudo su -
@@ -51,20 +54,21 @@ systemctl start splunk
 
 ## Configure Splunk
 
-Sign In to http://${splunk_fqdn}:8000 
+* Sign In to http://${splunk_fqdn}:8000 
 
 ![image](https://user-images.githubusercontent.com/87186004/235092744-45ee66d8-a45f-4f27-9cc3-a1a400c0ff14.png)
 
-Install "Splunk Add-on for Microsoft Cloud Services":
+* Install "Splunk Add-on for Microsoft Cloud Services":
 
 ![image](https://user-images.githubusercontent.com/87186004/235093619-0ff44edc-89d5-4bc2-8e50-9576fc12093e.png)
 
-Install "Monitoring Kubernetes - Metrics and Log Forwarding":
+* Install "Monitoring Kubernetes - Metrics and Log Forwarding":
 
 ![image](https://user-images.githubusercontent.com/87186004/235093878-29f6a75e-edb6-4388-9c9d-2fa06d6d7c49.png)
 
 ## Azure - Create AKS cluster
 
+* Create AKS cluster:
 ```bash
 AKS_RESOURCE_GROUP="aks-splunk-rg"
 AKS_REGION="westeurope"
@@ -76,6 +80,7 @@ az aks create -g "$AKS_RESOURCE_GROUP" -n "$AKS_NAME" --enable-managed-identity 
 
 ## Azure - Create Event Hub Namespace & Event Hub
 
+* Create Event Hub Namespace & Event Hub:
 ```bash
 EH_RESOURCE_GROUP="eventhub-rg"
 EH_REGION="westeurope"
@@ -86,8 +91,72 @@ az eventhubs namespace create --name "$EH_NS_NAME" --resource-group "$EH_RESOURC
 az eventhubs eventhub create --name "$EH_NAME" --resource-group "$EH_RESOURCE_GROUP" --namespace-name "$EH_NS_NAME"
 ```
 
+# Configuration - Control Plane Logs & Audit logs to Splunk
+
 ## Azure - Configure AKS Diagnostic Settings
 
-Configure AKS cluster to send all logs & metrics to Event Hub:
+* Configure AKS cluster to send all logs & metrics to Event Hub:
 
 ![image](https://user-images.githubusercontent.com/87186004/235100424-c19b7798-7fd5-407b-b147-af9a0936d718.png)
+
+## Splunk - Configure Splunk Add-on for Microsoft Cloud Services
+
+* Create an Azure Service Principal:
+```bash
+az ad sp create-for-rbac --name "AZ_SP_SPLUNK" --skip-assignment
+```
+
+* Assign `Azure Event Hubs Data Receiver` role to Service Principal on Event Hub Namespace:
+```bash
+az role assignment create --role "Azure Event Hubs Data Receiver" --assignee "4653eade-c757-43b9-xxxx-97855b3aab40" --scope "/subscriptions/2c49b441-xxxx-xxxx-xxxx-cd28d472544d/resourceGroups/eventhub-rg/providers/Microsoft.EventHub/namespaces/eh-ns-monitoring-1602"
+```
+
+* Configure SP in Splunk Add-On for Microsoft Cloud Services
+![image](https://user-images.githubusercontent.com/87186004/235101396-fa5770b6-3c17-4de9-b6e5-2507002956ce.png)
+
+* Add Event Hub as an input of the Add-On:
+
+![image](https://user-images.githubusercontent.com/87186004/235102487-325e4caf-54c9-4570-aa19-bc541871993e.png)
+
+* Check logs are available:
+
+![image](https://user-images.githubusercontent.com/87186004/235103018-16845ee0-8861-423c-b046-5bacac03289d.png)
+
+# Configuration - Applications Logs & Metrics to Splunk
+
+## Splunk - Create HTTP Event Collector
+
+* Add a new HTTP Event Collector:
+
+![image](https://user-images.githubusercontent.com/87186004/235104098-e7902a52-fdcb-4f2b-a5b2-e25cdc7bf6f2.png)
+
+![image](https://user-images.githubusercontent.com/87186004/235104203-61666010-2ec1-4d4e-b1d2-a7bb4e9b9251.png)
+
+![image](https://user-images.githubusercontent.com/87186004/235104250-89d5c886-0d7b-47a9-be4d-db05e7839629.png)
+
+![image](https://user-images.githubusercontent.com/87186004/235104295-faa47f25-d6bb-4485-9fcb-65da0f6cb0b2.png)
+
+## Splunk - Enable HTTP Event Collector
+
+* Enable HTTP Event Collector
+
+![image](https://user-images.githubusercontent.com/87186004/235104627-7f468949-a57b-4c59-9255-6ea525f54bad.png)
+
+![image](https://user-images.githubusercontent.com/87186004/235104756-ed33ea40-47f6-4b2b-aa37-2b93d7d9eca8.png)
+
+![image](https://user-images.githubusercontent.com/87186004/235104847-36775242-dce2-43e8-8b1e-ca7118ea3b23.png)
+
+## AKS - Install collectorforkubernetes solution
+
+Installation guide is available here: https://www.outcoldsolutions.com/docs/monitoring-kubernetes/v5/installation/
+
+
+
+
+
+
+
+
+
+
+
