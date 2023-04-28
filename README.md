@@ -1,6 +1,8 @@
 # Lab - AKS Monitoring with Splunk
 
-This LAB is for POC purpose only!
+> This LAB is for POC purpose only!
+
+This lab is designed to set up an AKS cluster and a VM with Splunk installed. We then configure the AKS diagnostics settings (control plane and audit logs) to be sent to Splunk via an Event Hub. Finally, we configure the cluster by installing the solution `collectorforkubernetes` to send application metrics and logs to Splunk using an HTTP Event Collector.
 
 - [Infrastructure Provisionning](#infrastructure-provisionning)
   * [Azure - Create Splunk VM](#azure---create-splunk-vm)
