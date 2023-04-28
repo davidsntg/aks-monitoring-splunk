@@ -235,7 +235,5 @@ collectorforkubernetes-master   0         0         0       0            0      
 ```
 * Go to Splunk App - Monitoring Kubernetes:
 
-![image](https://user-images.githubusercontent.com/87186004/235111435-1cba238d-abf1-44c8-bda6-7fcb0ee7e9f7.png)
-
-
+![image](https://user-images.githubusercontent.com/87186004/235113045-883255a0-7eb4-421e-92d7-7bd35a98b850.png)
 
