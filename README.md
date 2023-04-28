@@ -31,6 +31,11 @@ echo "Connect to Splunk VM: ssh ${ssh_admin_user}@${splunk_fqdn}"
 
 ## Install Splunk
 
+Create and account on Splunk Enteprise website and copy Linux .deb installer download link:
+
+![image](https://user-images.githubusercontent.com/87186004/235093298-0c6f6776-d0ea-4d24-b1cf-8fc509c656f1.png)
+
+
 Connect to Splunk VM in SSH and execute below commands:
 
 ```bash
@@ -47,3 +52,15 @@ systemctl start splunk
 ## Configure Splunk
 
 Sign In to http://${splunk_fqdn}:8000 
+
+![image](https://user-images.githubusercontent.com/87186004/235092744-45ee66d8-a45f-4f27-9cc3-a1a400c0ff14.png)
+
+Install "Splunk Add-on for Microsoft Cloud Services":
+
+![image](https://user-images.githubusercontent.com/87186004/235093619-0ff44edc-89d5-4bc2-8e50-9576fc12093e.png)
+
+Install "Monitoring Kubernetes - Metrics and Log Forwarding":
+
+![image](https://user-images.githubusercontent.com/87186004/235093878-29f6a75e-edb6-4388-9c9d-2fa06d6d7c49.png)
+
+## Azure - Create AKS cluster
