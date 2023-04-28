@@ -64,3 +64,30 @@ Install "Monitoring Kubernetes - Metrics and Log Forwarding":
 ![image](https://user-images.githubusercontent.com/87186004/235093878-29f6a75e-edb6-4388-9c9d-2fa06d6d7c49.png)
 
 ## Azure - Create AKS cluster
+
+```bash
+AKS_RESOURCE_GROUP="aks-splunk-rg"
+AKS_REGION="westeurope"
+AKS_NAME="aks-demo-splunk"
+
+az group create -n "$AKS_RESOURCE_GROUP" -l "$AKS_REGION"
+az aks create -g "$AKS_RESOURCE_GROUP" -n "$AKS_NAME" --enable-managed-identity --node-count 1 --enable-addons monitoring --enable-msi-auth-for-monitoring  --generate-ssh-keys
+```
+
+## Azure - Create Event Hub Namespace & Event Hub
+
+```bash
+EH_RESOURCE_GROUP="eventhub-rg"
+EH_REGION="westeurope"
+EH_NS_NAME="eh-ns-monitoring-$RANDOM"
+EH_NAME="eh-monitoring-$RANDOM"
+az group create -n "$EH_RESOURCE_GROUP" -l "$EH_REGION"
+az eventhubs namespace create --name "$EH_NS_NAME" --resource-group "$EH_RESOURCE_GROUP" -l "$AKS_REGION"
+az eventhubs eventhub create --name "$EH_NAME" --resource-group "$EH_RESOURCE_GROUP" --namespace-name "$EH_NS_NAME"
+```
+
+## Azure - Configure AKS Diagnostic Settings
+
+Configure AKS cluster to send all logs & metrics to Event Hub:
+
+![image](https://user-images.githubusercontent.com/87186004/235100424-c19b7798-7fd5-407b-b147-af9a0936d718.png)
