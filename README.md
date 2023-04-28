@@ -2,7 +2,6 @@
 
 This LAB is for POC purpose only!
 
-- [Lab - AKS Monitoring with Splunk](#lab---aks-monitoring-with-splunk)
 - [Infrastructure Provisionning](#infrastructure-provisionning)
   * [Azure - Create Splunk VM](#azure---create-splunk-vm)
   * [Install Splunk](#install-splunk)
@@ -232,9 +231,9 @@ NAME                            DESIRED   CURRENT   READY   UP-TO-DATE   AVAILAB
 collectorforkubernetes          1         1         1       1            1           <none>          91s
 collectorforkubernetes-master   0         0         0       0            0           <none>          91s
 ```
+* Go to Splunk App - Monitoring Kubernetes:
 
-
-
+![image](https://user-images.githubusercontent.com/87186004/235111435-1cba238d-abf1-44c8-bda6-7fcb0ee7e9f7.png)
 
 
 
