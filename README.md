@@ -1,5 +1,23 @@
 # Lab - AKS Monitoring with Splunk
 
+This LAB is for POC purpose only!
+
+- [Lab - AKS Monitoring with Splunk](#lab---aks-monitoring-with-splunk)
+- [Infrastructure Provisionning](#infrastructure-provisionning)
+  * [Azure - Create Splunk VM](#azure---create-splunk-vm)
+  * [Install Splunk](#install-splunk)
+  * [Configure Splunk](#configure-splunk)
+  * [Azure - Create AKS cluster](#azure---create-aks-cluster)
+  * [Azure - Create Event Hub Namespace & Event Hub](#azure---create-event-hub-namespace---event-hub)
+- [Configuration - Control Plane Logs & Audit logs to Splunk](#configuration---control-plane-logs---audit-logs-to-splunk)
+  * [Azure - Configure AKS Diagnostic Settings](#azure---configure-aks-diagnostic-settings)
+  * [Splunk - Configure Splunk Add-on for Microsoft Cloud Services](#splunk---configure-splunk-add-on-for-microsoft-cloud-services)
+- [Configuration - Applications Logs & Metrics to Splunk](#configuration---applications-logs---metrics-to-splunk)
+  * [Splunk - Create HTTP Event Collector](#splunk---create-http-event-collector)
+  * [Splunk - Enable HTTP Event Collector](#splunk---enable-http-event-collector)
+  * [AKS - Install collectorforkubernetes solution](#aks---install-collectorforkubernetes-solution)
+  * [Configure collectorforkubernetes solution](#configure-collectorforkubernetes-solution)
+
 # Infrastructure Provisionning
 
 ## Azure - Create Splunk VM
